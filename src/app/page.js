@@ -208,7 +208,7 @@ export default function Home() {
             )}
           </AnimatePresence>
 
-          <VideoResult data={videoData} />
+          <VideoResult data={videoData} sourceUrl={url} />
 
           {loading && !videoData && (
             <div className="mt-20 flex flex-col items-center gap-6 text-accent/40 uppercase tracking-[0.2em] text-sm">
