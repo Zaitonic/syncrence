@@ -3,6 +3,8 @@ import { NextResponse } from 'next/server';
 // Working Cobalt API endpoints (these are the actual API URLs, NOT frontend URLs)
 // Sourced from https://cobalt.directory/api/working?type=api
 const COBALT_INSTANCES = [
+  "https://api.cobalt.tools",
+  "https://cobalt.moe/api",
   "https://cobaltapi.kittycat.boo",
   "https://nuko-c.meowing.de",
   "https://api.qwkuns.me",
@@ -19,10 +21,15 @@ async function callCobalt(url, downloadMode = "auto") {
   const body = {
     url: url,
     videoQuality: "1080",
-    audioFormat: "mp3",
+    vQuality: "1080",          // Explicit quality
+    youtubeVideoCodec: "h264", // Ensure MP4 compatibility
+    vCodec: "h264",            // Alias
+    audioFormat: "best",
+    aFormat: "best",           // Best audio for video merging
     audioBitrate: "320",
     downloadMode: downloadMode,
-    filenameStyle: "basic",
+    filenameStyle: "pretty",
+    youtubeHls: false,         // Progressive streams are more stable for long videos
   };
 
   for (const instance of COBALT_INSTANCES) {
@@ -35,7 +42,7 @@ async function callCobalt(url, downloadMode = "auto") {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(body),
-        signal: AbortSignal.timeout(20000),
+        signal: AbortSignal.timeout(60000), // Increased to 60s for longer videos
       });
 
       const data = await res.json();
@@ -107,8 +114,8 @@ export async function POST(req) {
 
     const finalData = {
       title: filename,
-      thumbnail: cobaltData.picker?.[0]?.thumb || `https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=800&q=80`,
-      duration: "Original",
+      thumbnail: cobaltData.picker?.[0]?.thumb || cobaltData.thumbnail || `https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=800&q=80`,
+      duration: cobaltData.duration ? formatDuration(cobaltData.duration) : "Full Video",
       platform: platform.charAt(0).toUpperCase() + platform.slice(1),
       qualities: qualities,
       downloadUrl: downloadUrl,
@@ -122,11 +129,20 @@ export async function POST(req) {
   }
 }
 
+function formatDuration(seconds) {
+  if (!seconds) return "Full Video";
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = Math.floor(seconds % 60);
+  if (h > 0) return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  return `${m}:${s.toString().padStart(2, '0')}`;
+}
+
 function detectPlatform(url) {
   const u = url.toLowerCase();
   if (u.includes('tiktok.com')) return 'tiktok';
   if (u.includes('instagram.com')) return 'instagram';
-  if (u.includes('facebook.com') || u.includes('fb.watch')) return 'facebook';
+  if (u.includes('facebook.com') || u.includes('fb.watch') || u.includes('fb.com')) return 'facebook';
   if (u.includes('twitter.com') || u.includes('x.com')) return 'twitter';
   if (u.includes('youtube.com') || u.includes('youtu.be')) return 'youtube';
   if (u.includes('pinterest.com')) return 'pinterest';
