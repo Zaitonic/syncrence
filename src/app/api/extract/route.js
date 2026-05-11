@@ -4,7 +4,6 @@ import { NextResponse } from 'next/server';
 // Sourced from https://cobalt.directory/api/working?type=api
 const COBALT_INSTANCES = [
   "https://api.cobalt.tools",
-  "https://cobalt.moe/api",
   "https://cobaltapi.kittycat.boo",
   "https://nuko-c.meowing.de",
   "https://api.qwkuns.me",
@@ -15,6 +14,10 @@ const COBALT_INSTANCES = [
   "https://dog.kittycat.boo",
   "https://fox.kittycat.boo",
   "https://lime.clxxped.lol",
+  "https://cobalt.moe/api",
+  "https://api.cobalt.red",
+  "https://cobalt-api.lunes.host",
+  "https://cobalt.hyonsu.com",
 ];
 
 async function callCobalt(url, downloadMode = "auto") {
@@ -40,10 +43,16 @@ async function callCobalt(url, downloadMode = "auto") {
         headers: {
           "Accept": "application/json",
           "Content-Type": "application/json",
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
         },
         body: JSON.stringify(body),
         signal: AbortSignal.timeout(60000), // Increased to 60s for longer videos
       });
+
+      if (!res.ok) {
+        console.error(`[Cobalt ${instance}] HTTP Error: ${res.status}`);
+        continue;
+      }
 
       const data = await res.json();
 
