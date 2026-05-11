@@ -1,41 +1,59 @@
 import { NextResponse } from 'next/server';
 
-// Working Cobalt API endpoints (these are the actual API URLs, NOT frontend URLs)
-// Sourced from https://cobalt.directory/api/working?type=api
+// ============================================================
+// VERIFIED WORKING Cobalt v11 API instances (NO Turnstile required)
+// Source: https://cobalt.directory/api/working?type=api
+// Last verified: 2026-05-11
+//
+// Instances WITH turnstileSitekey are EXCLUDED because they
+// require a browser-side captcha solve, which we can't do
+// from a server-side API route.
+// ============================================================
 const COBALT_INSTANCES = [
-  "https://api.cobalt.tools",
   "https://cobaltapi.kittycat.boo",
-  "https://nuko-c.meowing.de",
-  "https://api.qwkuns.me",
   "https://cobaltapi.squair.xyz",
-  "https://grapefruit.clxxped.lol",
-  "https://apicobalt.mgytr.top",
-  "https://api.cobalt.liubquanti.click",
   "https://dog.kittycat.boo",
   "https://fox.kittycat.boo",
+  "https://api.dl.woof.monster",
+  "https://cobalt.alpha.wolfy.love",
+  "https://cobalt.omega.wolfy.love",
+  "https://api.cobalt.liubquanti.click",
+  "https://apicobalt.mgytr.top",
+  "https://grapefruit.clxxped.lol",
+  "https://melon.clxxped.lol",
   "https://lime.clxxped.lol",
-  "https://cobalt.moe/api",
-  "https://api.cobalt.red",
-  "https://cobalt-api.lunes.host",
-  "https://cobalt.hyonsu.com",
+  "https://api.qwkuns.me",
+  "https://cobaltapi.cjs.nz",
+  "https://api.cobalt.blackcat.sweeux.org",
 ];
 
+// Shuffle array to distribute load across instances
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 async function callCobalt(url, downloadMode = "auto") {
+  // Cobalt v11 API schema — only documented keys
   const body = {
     url: url,
     videoQuality: "1080",
-    vQuality: "1080",          // Explicit quality
-    youtubeVideoCodec: "h264", // Ensure MP4 compatibility
-    vCodec: "h264",            // Alias
-    audioFormat: "best",
-    aFormat: "best",           // Best audio for video merging
+    youtubeVideoCodec: "h264",
+    audioFormat: "mp3",
     audioBitrate: "320",
     downloadMode: downloadMode,
     filenameStyle: "pretty",
-    youtubeHls: false,         // Progressive streams are more stable for long videos
+    youtubeHLS: false,
+    tiktokFullAudio: true,
   };
 
-  for (const instance of COBALT_INSTANCES) {
+  const instances = shuffle(COBALT_INSTANCES);
+
+  for (const instance of instances) {
     try {
       console.log(`[Cobalt] Trying ${instance}...`);
       const res = await fetch(instance, {
@@ -43,28 +61,38 @@ async function callCobalt(url, downloadMode = "auto") {
         headers: {
           "Accept": "application/json",
           "Content-Type": "application/json",
-          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
         },
         body: JSON.stringify(body),
-        signal: AbortSignal.timeout(60000), // Increased to 60s for longer videos
+        signal: AbortSignal.timeout(30000),
       });
 
       if (!res.ok) {
-        console.error(`[Cobalt ${instance}] HTTP Error: ${res.status}`);
+        const status = res.status;
+        const text = await res.text().catch(() => "");
+        console.error(`[Cobalt ${instance}] HTTP ${status}: ${text.slice(0, 200)}`);
         continue;
       }
 
       const data = await res.json();
 
       if (data.status === "error") {
-        console.error(`[Cobalt ${instance}] Error:`, data.error?.code || JSON.stringify(data.error));
+        const code = data.error?.code || JSON.stringify(data.error);
+        console.error(`[Cobalt ${instance}] Error: ${code}`);
+
+        // If it's an auth error (turnstile required), skip this instance
+        if (code.includes("auth")) continue;
+
+        // For other errors (like content.video.unavailable), no point trying more
+        if (code.includes("content.")) {
+          return { _error: code };
+        }
         continue;
       }
 
-      console.log(`[Cobalt] Success from ${instance}, status: ${data.status}`);
+      console.log(`[Cobalt] ✓ Success from ${instance}, status: ${data.status}`);
       return data;
     } catch (err) {
-      console.error(`[Cobalt ${instance}] Failed:`, err.message);
+      console.error(`[Cobalt ${instance}] Failed: ${err.message}`);
       continue;
     }
   }
@@ -92,6 +120,13 @@ export async function POST(req) {
       return NextResponse.json({
         error: "All extraction servers are currently busy. Please try again in a moment."
       }, { status: 503 });
+    }
+
+    // Handle content-level errors from cobalt
+    if (cobaltData._error) {
+      return NextResponse.json({
+        error: `This content is unavailable for download (${cobaltData._error}).`
+      }, { status: 422 });
     }
 
     let qualities = [];
@@ -123,8 +158,8 @@ export async function POST(req) {
 
     const finalData = {
       title: filename,
-      thumbnail: cobaltData.picker?.[0]?.thumb || cobaltData.thumbnail || `https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=800&q=80`,
-      duration: cobaltData.duration ? formatDuration(cobaltData.duration) : "Full Video",
+      thumbnail: cobaltData.picker?.[0]?.thumb || `https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=800&q=80`,
+      duration: "Full Video",
       platform: platform.charAt(0).toUpperCase() + platform.slice(1),
       qualities: qualities,
       downloadUrl: downloadUrl,
@@ -138,30 +173,22 @@ export async function POST(req) {
   }
 }
 
-function formatDuration(seconds) {
-  if (!seconds) return "Full Video";
-  const h = Math.floor(seconds / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  const s = Math.floor(seconds % 60);
-  if (h > 0) return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-  return `${m}:${s.toString().padStart(2, '0')}`;
-}
-
 function detectPlatform(url) {
   const u = url.toLowerCase();
-  if (u.includes('tiktok.com')) return 'tiktok';
+  if (u.includes('tiktok.com') || u.includes('vt.tiktok')) return 'tiktok';
   if (u.includes('instagram.com')) return 'instagram';
   if (u.includes('facebook.com') || u.includes('fb.watch') || u.includes('fb.com')) return 'facebook';
   if (u.includes('twitter.com') || u.includes('x.com')) return 'twitter';
   if (u.includes('youtube.com') || u.includes('youtu.be')) return 'youtube';
-  if (u.includes('pinterest.com')) return 'pinterest';
+  if (u.includes('pinterest.com') || u.includes('pin.it')) return 'pinterest';
   if (u.includes('reddit.com')) return 'reddit';
   if (u.includes('vimeo.com')) return 'vimeo';
-  if (u.includes('linkedin.com')) return 'linkedin';
   if (u.includes('soundcloud.com')) return 'soundcloud';
   if (u.includes('twitch.tv')) return 'twitch';
   if (u.includes('dailymotion.com')) return 'dailymotion';
   if (u.includes('bilibili.com')) return 'bilibili';
   if (u.includes('tumblr.com')) return 'tumblr';
+  if (u.includes('snapchat.com')) return 'snapchat';
+  if (u.includes('streamable.com')) return 'streamable';
   return null;
 }
