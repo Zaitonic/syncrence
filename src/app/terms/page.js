@@ -53,22 +53,23 @@ export default function TermsPage() {
               </p>
             </div>
 
-            <div className="grid gap-8 mt-12">
+            <div className="grid gap-10 mt-16">
               {sections.map((s, i) => (
                 <motion.div
                   key={i}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 * i }}
-                  className="glass-card p-10 space-y-6"
+                  className="glass-card p-12 space-y-8 border-white/5 shadow-2xl relative overflow-hidden group"
                 >
-                  <div className="flex items-center gap-4">
-                    <div className="p-3 rounded-full bg-accent/10 border border-accent/20 text-accent">
-                      <s.icon size={24} />
+                  <div className="absolute top-0 left-0 w-1 h-full bg-accent/20 group-hover:bg-accent transition-all"></div>
+                  <div className="flex items-center gap-6">
+                    <div className="p-4 rounded-2xl bg-accent/5 border border-accent/10 text-accent group-hover:bg-accent group-hover:text-[#040d0a] transition-all">
+                      <s.icon size={28} />
                     </div>
-                    <h3 className="text-2xl font-serif tracking-widest uppercase">{s.title}</h3>
+                    <h3 className="text-3xl font-serif tracking-[0.1em] uppercase text-foreground/80">{s.title}</h3>
                   </div>
-                  <p className="text-foreground/60 leading-relaxed tracking-wide uppercase text-xs sm:text-sm">
+                  <p className="text-foreground/40 leading-relaxed tracking-[0.15em] uppercase text-xs sm:text-sm font-medium italic">
                     {s.content}
                   </p>
                 </motion.div>

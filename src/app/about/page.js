@@ -54,27 +54,29 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="prose prose-invert max-w-none">
-              <p className="text-xl leading-relaxed text-foreground/70 font-light">
+            <div className="max-w-none">
+              <p className="text-xl leading-relaxed text-foreground/90 font-light italic">
                 SocialSaver is not just a downloader; it is a sophisticated media extraction protocol designed for the modern web. Built by MarkRence, it leverages distributed computing techniques to retrieve high-fidelity assets from complex social architectures.
               </p>
-              <p className="text-lg leading-relaxed text-foreground/50 font-light mt-6">
+              <p className="text-lg leading-relaxed text-foreground/40 font-light mt-8 border-l-2 border-accent/20 pl-8">
                 Our mission is to provide a clean, ad-free environment for users to secure their digital footprints and manage their media consumption without the friction of platform-specific restrictions.
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8 mt-16">
+            <div className="grid md:grid-cols-2 gap-10 mt-20">
               {features.map((f, i) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.1 * i }}
-                  className="glass-card p-8 space-y-4 border-l-4 border-l-accent/30"
+                  className="glass-card p-10 space-y-6 border border-white/5 border-l-4 border-l-accent shadow-2xl hover:scale-[1.02] transition-transform"
                 >
-                  <f.icon className="text-accent" size={32} />
-                  <h3 className="text-xl font-medium tracking-wider uppercase">{f.title}</h3>
-                  <p className="text-sm text-foreground/40 leading-relaxed uppercase tracking-widest">{f.desc}</p>
+                  <div className="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center text-accent">
+                    <f.icon size={32} />
+                  </div>
+                  <h3 className="text-xl font-bold tracking-widest uppercase text-accent/90">{f.title}</h3>
+                  <p className="text-sm text-foreground/40 leading-relaxed uppercase tracking-[0.2em]">{f.desc}</p>
                 </motion.div>
               ))}
             </div>

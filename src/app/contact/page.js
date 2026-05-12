@@ -45,40 +45,41 @@ export default function ContactPage() {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-8 max-w-2xl mx-auto">
               {channels.map((c, i) => (
                 <a
                   key={i}
                   href={c.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="glass-card p-8 flex flex-col items-center text-center gap-6 group hover:border-accent transition-all duration-500"
+                  className="glass-card p-10 flex flex-col items-center text-center gap-8 group hover:border-accent transition-all duration-500 shadow-2xl"
                 >
-                  <div className="p-4 rounded-full bg-glass border border-glass-border group-hover:bg-accent/10 transition-colors">
-                    <c.icon className="text-accent" size={28} />
+                  <div className="p-5 rounded-2xl bg-accent/5 border border-accent/20 group-hover:bg-accent group-hover:text-[#040d0a] transition-all">
+                    <c.icon className="text-accent group-hover:text-inherit" size={32} />
                   </div>
-                  <div className="space-y-2">
-                    <p className="text-[10px] uppercase tracking-[0.3em] text-foreground/40 font-bold">{c.label}</p>
-                    <p className="text-sm font-medium tracking-widest text-foreground group-hover:text-accent transition-colors">{c.value}</p>
+                  <div className="space-y-3">
+                    <p className="text-[10px] uppercase tracking-[0.4em] text-accent font-bold opacity-60">{c.label}</p>
+                    <p className="text-sm font-bold tracking-widest text-foreground/90">{c.value}</p>
                   </div>
                 </a>
               ))}
             </div>
 
-            <div className="glass-card p-12 mt-12 space-y-8">
-              <div className="space-y-2">
-                <h2 className="text-2xl font-serif tracking-widest uppercase">Send a Packet</h2>
-                <p className="text-xs uppercase tracking-widest text-foreground/40">Inquiry or feedback regarding the engine</p>
+            <div className="glass-card p-12 mt-12 space-y-10 border-white/5 shadow-2xl relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-40 h-40 bg-accent/5 blur-[60px] rounded-full"></div>
+              <div className="space-y-3 relative z-10">
+                <h2 className="text-3xl font-serif tracking-[0.2em] uppercase text-accent/80">Transmit Signal</h2>
+                <p className="text-xs uppercase tracking-[0.3em] text-foreground/30 font-bold italic">Bypass platform restrictions via direct inquiry</p>
               </div>
 
-              <div className="grid gap-6">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <input type="text" placeholder="IDENTITY" className="accent-input p-4 glass-card bg-transparent !rounded-xl" />
-                  <input type="email" placeholder="SIGNAL SOURCE (EMAIL)" className="accent-input p-4 glass-card bg-transparent !rounded-xl" />
+              <div className="grid gap-8 relative z-10">
+                <div className="grid md:grid-cols-2 gap-8">
+                  <input type="text" placeholder="IDENTITY" className="accent-input p-5 glass-card bg-[#040d0a]/40 !rounded-2xl border-white/10" />
+                  <input type="email" placeholder="SIGNAL SOURCE" className="accent-input p-5 glass-card bg-[#040d0a]/40 !rounded-2xl border-white/10" />
                 </div>
-                <textarea rows={4} placeholder="ENCODED MESSAGE" className="accent-input p-4 glass-card bg-transparent !rounded-xl resize-none"></textarea>
-                <button className="accent-button py-4 rounded-xl flex items-center justify-center gap-2 uppercase tracking-[0.4em] font-bold text-xs">
-                  Transmit <Send size={16} />
+                <textarea rows={5} placeholder="ENCODED MESSAGE" className="accent-input p-5 glass-card bg-[#040d0a]/40 !rounded-2xl resize-none border-white/10"></textarea>
+                <button className="accent-button py-5 rounded-2xl flex items-center justify-center gap-4 text-sm font-bold shadow-2xl shadow-accent/10">
+                  SEND PACKET <Send size={20} />
                 </button>
               </div>
             </div>

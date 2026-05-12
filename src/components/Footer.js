@@ -1,4 +1,5 @@
 import { Link as LinkIcon, Download, CheckCircle, Layout } from "lucide-react";
+import { FacebookIcon, InstagramIcon, GithubIcon } from "./Icons";
 
 const steps = [
   { icon: LinkIcon, title: "Source", desc: "Acquire the video URL." },
@@ -8,46 +9,58 @@ const steps = [
 ];
 
 export default function Footer() {
+  const socialLinks = {
+    facebook: 'https://www.facebook.com/mark.laurence.305159',
+    instagram: 'https://www.instagram.com/markrence_31',
+    github: 'https://github.com/Zaitonic'
+  };
+
   return (
-    <footer className="w-full max-w-6xl mx-auto px-8 py-24 border-t border-glass-border mt-32">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
+    <footer className="w-full max-w-6xl mx-auto px-8 py-24 border-t border-glass-border/20 mt-32">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-20">
         {steps.map((step, i) => (
           <div key={i} className="flex flex-col items-center text-center gap-6 group">
-            <div className="p-5 rounded-full bg-glass border border-glass-border group-hover:border-accent transition-all duration-500">
-              <step.icon size={24} className="text-accent" />
+            <div className="p-6 rounded-2xl bg-[#040d0a]/60 border border-glass-border group-hover:border-accent/40 transition-all duration-500 shadow-xl group-hover:shadow-accent/5">
+              <step.icon size={26} className="text-accent/70 group-hover:text-accent transition-colors" />
             </div>
             <div className="space-y-2">
-              <h3 className="text-xs uppercase tracking-[0.3em] font-medium text-foreground/80">{step.title}</h3>
-              <p className="text-[10px] uppercase tracking-widest text-foreground/40 leading-relaxed">{step.desc}</p>
+              <h3 className="text-xs uppercase tracking-[0.4em] font-semibold text-foreground/70">{step.title}</h3>
+              <p className="text-[10px] uppercase tracking-[0.2em] text-foreground/30 leading-relaxed italic">{step.desc}</p>
             </div>
           </div>
         ))}
       </div>
       
-      <div className="mt-24 space-y-8 border-t border-glass-border/50 pt-12">
-        <div className="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
-          <div className="space-y-4">
-            <h4 className="text-[10px] uppercase tracking-[0.3em] text-accent/60 font-bold flex items-center gap-2">
-              <span className="w-4 h-[1px] bg-accent/30"></span> Legal Notice
-            </h4>
-            <p className="text-[11px] text-foreground/30 uppercase tracking-widest leading-relaxed">
-              Respect copyright laws. Downloading or distributing copyrighted works without explicit permission is strictly prohibited by law.
-            </p>
+      <div className="pt-20 border-t border-glass-border/10">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-16">
+          <div className="flex flex-col gap-6 text-center md:text-left">
+            <h4 className="text-[10px] uppercase tracking-[0.5em] text-accent font-bold opacity-60">Connect</h4>
+            <div className="flex items-center justify-center md:justify-start gap-8">
+              <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="text-foreground/20 hover:text-accent transition-all transform hover:scale-125 hover:-translate-y-1">
+                <FacebookIcon size={22} />
+              </a>
+              <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="text-foreground/20 hover:text-accent transition-all transform hover:scale-125 hover:-translate-y-1">
+                <InstagramIcon size={22} />
+              </a>
+              <a href={socialLinks.github} target="_blank" rel="noopener noreferrer" className="text-foreground/20 hover:text-accent transition-all transform hover:scale-125 hover:-translate-y-1">
+                <GithubIcon size={22} />
+              </a>
+            </div>
           </div>
-          <div className="space-y-4">
-            <h4 className="text-[10px] uppercase tracking-[0.3em] text-accent/60 font-bold flex items-center gap-2">
-              <span className="w-4 h-[1px] bg-accent/30"></span> Ethics Protocol
-            </h4>
-            <p className="text-[11px] text-foreground/30 uppercase tracking-widest leading-relaxed">
-              Please use this tool responsibly and ethically. We do not host any content and are not responsible for user actions.
-            </p>
-          </div>
-        </div>
 
-        <div className="text-center pt-12">
-          <p className="text-[10px] uppercase tracking-[0.5em] text-foreground/20 font-light">
-            SocialSaver Protocol // Verified Environment // © {new Date().getFullYear()} MarkRence
-          </p>
+          <div className="flex flex-col gap-6 text-center">
+            <h4 className="text-[10px] uppercase tracking-[0.5em] text-accent font-bold opacity-60">Credits</h4>
+            <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/30 font-light">
+              Atmospheric synthesis by <a href="https://paraluman.xyz" target="_blank" rel="noopener noreferrer" className="text-accent/60 hover:text-accent hover:underline transition-all">paraluman.xyz</a>
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-6 text-center md:text-right">
+            <h4 className="text-[10px] uppercase tracking-[0.5em] text-accent font-bold opacity-60">Engine</h4>
+            <p className="text-[10px] uppercase tracking-[0.6em] text-foreground/10 font-mono">
+              SocialSaver Core // © {new Date().getFullYear()} MarkRence
+            </p>
+          </div>
         </div>
       </div>
     </footer>
