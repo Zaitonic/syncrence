@@ -43,7 +43,7 @@ export default function VideoResult({ data, sourceUrl }) {
     <motion.div 
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
-      className="w-full max-w-2xl glass-card p-10 mt-12 space-y-10 relative overflow-hidden"
+      className="w-full max-w-2xl glass-card p-6 sm:p-10 mt-12 space-y-8 sm:space-y-10 relative overflow-hidden"
     >
       <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 blur-[50px] rounded-full"></div>
       

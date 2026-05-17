@@ -31,33 +31,33 @@ export default function Footer() {
         ))}
       </div>
       
-      <div className="pt-20 border-t border-glass-border/10">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-16">
-          <div className="flex flex-col gap-6 text-center md:text-left">
-            <h4 className="text-[10px] uppercase tracking-[0.5em] text-accent font-bold opacity-60">Connect</h4>
-            <div className="flex items-center justify-center md:justify-start gap-8">
+      <div className="pt-16 border-t border-glass-border/10">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-12 sm:gap-16">
+          <div className="flex flex-col gap-4 sm:gap-6 text-center md:text-left w-full md:w-auto">
+            <h4 className="text-[10px] uppercase tracking-[0.4em] sm:tracking-[0.5em] text-accent font-bold opacity-60">Connect</h4>
+            <div className="flex items-center justify-center md:justify-start gap-6 sm:gap-8">
               <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="text-foreground/20 hover:text-accent transition-all transform hover:scale-125 hover:-translate-y-1">
-                <FacebookIcon size={22} />
+                <FacebookIcon size={20} />
               </a>
               <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="text-foreground/20 hover:text-accent transition-all transform hover:scale-125 hover:-translate-y-1">
-                <InstagramIcon size={22} />
+                <InstagramIcon size={20} />
               </a>
               <a href={socialLinks.github} target="_blank" rel="noopener noreferrer" className="text-foreground/20 hover:text-accent transition-all transform hover:scale-125 hover:-translate-y-1">
-                <GithubIcon size={22} />
+                <GithubIcon size={20} />
               </a>
             </div>
           </div>
 
-          <div className="flex flex-col gap-6 text-center">
-            <h4 className="text-[10px] uppercase tracking-[0.5em] text-accent font-bold opacity-60">Credits</h4>
-            <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/30 font-light">
+          <div className="flex flex-col gap-4 sm:gap-6 text-center w-full md:w-auto">
+            <h4 className="text-[10px] uppercase tracking-[0.4em] sm:tracking-[0.5em] text-accent font-bold opacity-60">Credits</h4>
+            <p className="text-[10px] sm:text-[11px] uppercase tracking-[0.2em] sm:tracking-[0.3em] text-foreground/30 font-light">
               Atmospheric synthesis by <a href="https://paraluman.xyz" target="_blank" rel="noopener noreferrer" className="text-accent/60 hover:text-accent hover:underline transition-all">paraluman.xyz</a>
             </p>
           </div>
 
-          <div className="flex flex-col gap-6 text-center md:text-right">
-            <h4 className="text-[10px] uppercase tracking-[0.5em] text-accent font-bold opacity-60">Engine</h4>
-            <p className="text-[10px] uppercase tracking-[0.6em] text-foreground/10 font-mono">
+          <div className="flex flex-col gap-4 sm:gap-6 text-center md:text-right w-full md:w-auto">
+            <h4 className="text-[10px] uppercase tracking-[0.4em] sm:tracking-[0.5em] text-accent font-bold opacity-60">Engine</h4>
+            <p className="text-[9px] sm:text-[10px] uppercase tracking-[0.4em] sm:tracking-[0.6em] text-foreground/10 font-mono">
               SocialSaver Core // © {new Date().getFullYear()} MarkRence
             </p>
           </div>

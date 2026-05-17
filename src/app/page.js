@@ -85,19 +85,19 @@ export default function Home() {
           >
             <div className="flex flex-col items-center gap-12 text-center">
               <motion.div 
-                className="w-72 h-72 relative"
+                className="w-48 h-48 sm:w-72 sm:h-72 relative"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 2 }}
               >
-                <div className="absolute inset-0 bg-accent/20 blur-[60px] rounded-full animate-pulse"></div>
+                <div className="absolute inset-0 bg-accent/20 blur-[40px] sm:blur-[60px] rounded-full animate-pulse"></div>
                 <img src="/logo.png" alt="Logo" className="w-full h-full object-cover relative z-10 brightness-[1.2] contrast-[1.1]" />
               </motion.div>
-              <div className="space-y-6">
-                <h2 className="text-5xl md:text-6xl font-serif tracking-[0.4em] text-accent uppercase font-light">SyncRence</h2>
+              <div className="space-y-4 sm:space-y-6">
+                <h2 className="text-3xl sm:text-5xl md:text-6xl font-serif tracking-[0.3em] sm:tracking-[0.4em] text-accent uppercase font-light">SyncRence</h2>
                 <motion.button 
                   onClick={() => setIsEntered(true)}
-                  className="accent-button px-16 py-5 rounded-full text-lg tracking-[0.5em] font-medium"
+                  className="accent-button px-10 sm:px-16 py-4 sm:py-5 rounded-full text-base sm:text-lg tracking-[0.4em] sm:tracking-[0.5em] font-medium"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 1, duration: 1 }}
@@ -120,11 +120,11 @@ export default function Home() {
             transition={{ delay: 0.5 }}
             className="text-center space-y-8 mb-16"
           >
-            <div className="space-y-2">
-              <h1 className="text-6xl md:text-9xl font-serif tracking-tight leading-none uppercase">
+            <div className="space-y-4">
+              <h1 className="text-4xl sm:text-6xl md:text-9xl font-serif tracking-tighter sm:tracking-tight leading-none uppercase">
                 Social<span className="text-accent">Saver</span>
               </h1>
-              <p className="text-lg text-foreground/40 max-w-xl mx-auto uppercase tracking-[0.3em] font-light italic">
+              <p className="text-sm sm:text-lg text-foreground/40 max-w-sm sm:max-w-xl mx-auto uppercase tracking-[0.2em] sm:tracking-[0.3em] font-light italic">
                 Advanced Extraction Engine // by MarkRence
               </p>
             </div>
@@ -146,14 +146,14 @@ export default function Home() {
             onSubmit={handleDownload}
             className="w-full max-w-3xl flex flex-col sm:flex-row gap-4"
           >
-            <div className="relative flex-1">
-              <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-foreground/20" size={20} />
+            <div className="relative flex-1 w-full">
+              <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-foreground/20" size={18} />
               <input 
                 type="text"
                 placeholder="Paste video link here..."
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                className="accent-input w-full pl-14 pr-6 py-5 text-lg glass-card !rounded-full"
+                className="accent-input w-full pl-12 pr-6 py-4 sm:py-5 text-base sm:text-lg glass-card !rounded-full"
               />
             </div>
             <button 
